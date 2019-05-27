@@ -24,6 +24,26 @@ exports.authorizationCode = "sqqzwpjtxqqtgdeb";//qq邮箱SMTP授权码
 ## Prerequisite
     npm install    
 - 安装mysql
+- 初始化数据库/创建表结构
+
+
+    create database if not exists QtLaTeX;
+    use QtLaTeX;
+    create table if not exists userInfo(
+        `name` varchar(30),
+        `passwd` varchar(30) NOT NULL ,
+        `email` varchar(30) NOT NULL ,
+        primary key (`name`)
+    )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    
+    create table if not exists files(
+        `fileName` varchar(40),
+        `content` longtext,
+        `owner` varchar(30),
+        PRIMARY KEY (`fileName`),
+        constraint `file_fileName_fk` foreign key (`owner`) references `userInfo` (`name`)
+    )ENGINE=InnoDB DEFAULT CHARSET=utf8; 
+    
 - 生成私钥/公钥
 
 
