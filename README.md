@@ -9,16 +9,16 @@ const path = require('path');
 
 exports.SRV_HOST = 'www.peter-sia.top';//服务器地址, e.g. 'localhost'
 exports.SRV_PORT = 2333;// 服务器端口
-exports.DB_USER = "root";//你的mysql账户
-exports.DB_PASSWD = "nihao20000514";//你的mysql用户密码
+exports.DB_USER = "username";//你的mysql账户
+exports.DB_PASSWD = "password";//你的mysql用户密码
 exports.DB_HOST = 'localhost';//数据库地址
 exports.DB_PORT = 3306;//数据库端口
 exports.DB_NAME = 'QtLaTeX';//数据库名
 
 exports.privateKey = fs.readFileSync(path.join(__dirname, 'rsa_private.pem'));//私钥文件,加密
 exports.publicKey = fs.readFileSync(path.join(__dirname, 'rsa_public_key.pem'));//公钥文件,解密
-exports.email = "1604764210@qq.com";//qq邮箱
-exports.authorizationCode = "sqqzwpjtxqqtgdeb";//qq邮箱SMTP授权码
+exports.email = "123456789@qq.com";//qq邮箱
+exports.authorizationCode = "**********";//qq邮箱SMTP授权码
 ```
 
 ## Prerequisite
