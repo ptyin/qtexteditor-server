@@ -26,7 +26,7 @@ exports.authorizationCode = "sqqzwpjtxqqtgdeb";//qq邮箱SMTP授权码
 - 安装mysql
 - 初始化数据库/创建表结构
 
-
+```sql
     create database if not exists QtLaTeX;
     use QtLaTeX;
     create table if not exists userInfo(
@@ -43,6 +43,7 @@ exports.authorizationCode = "sqqzwpjtxqqtgdeb";//qq邮箱SMTP授权码
         PRIMARY KEY (`fileName`),
         constraint `file_fileName_fk` foreign key (`owner`) references `userInfo` (`name`)
     )ENGINE=InnoDB DEFAULT CHARSET=utf8; 
+```
     
 - 生成私钥/公钥
 
