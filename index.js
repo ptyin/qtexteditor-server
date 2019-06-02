@@ -58,15 +58,15 @@ let data = {
 
 connection.connect();
 db.setConnection(connection);
-connection.query("select name from userInfo", function (error, result)
-{
-    if(error)console.log(error);
-    for(let index in result)console.log(index+":"+result[index].name);
-});
-let content = base64Encode('123456');//MTIzNDU2
-console.log(base64Decode(content)+":"+content);
-db.deleteFile("filename-a5-html");
-db.uploadFile("peter", "filename-a5-html", content, (result)=>{});//文件上传别忘编码
+// connection.query("select name from userInfo", function (error, result)
+// {
+//     if(error)console.log(error);
+//     for(let index in result)console.log(index+":"+result[index].name);
+// });
+// let content = base64Encode('123456');//MTIzNDU2
+// console.log(base64Decode(content)+":"+content);
+// db.deleteFile("filename-a5-html");
+// db.uploadFile("peter", "filename-a5-html", content, (result)=>{});//文件上传别忘编码
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
