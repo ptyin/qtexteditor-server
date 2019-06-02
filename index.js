@@ -177,14 +177,14 @@ app.get('/register', (req, res) =>
 * */
 app.post("/uploadFile", (req, res)=>
 {
-    if(req.query.token !== undefined)
+    if(req.body.token !== undefined)
     {
-        verifyToken(req.query.token, res, (decoded)=>
+        verifyToken(req.body.token, res, (decoded)=>
         {
             if(decoded.username===undefined)res.status(400).json({error: "unknown error"});
             else
             {
-                db.findOneFile(decoded.username, (error, result)=>
+                db.findOneFile(decoded.username, decoded.username + "-" + req.body.filename, (error, result)=>
                 {
                     if(error)
                     {
@@ -192,7 +192,7 @@ app.post("/uploadFile", (req, res)=>
                         return;
                     }
                     if(result[0])//update
-                    db.updateFile(decoded.username, req.query.filename, base64Encode(req.query.content), (error, results)=>
+                    db.updateFile(decoded.username, decoded.username + "-" + req.body.filename, base64Encode(req.body.content), (error, results)=>
                     {
                         if(error)
                         {
@@ -206,8 +206,8 @@ app.post("/uploadFile", (req, res)=>
                     });
                     else//create new file
                     {
-                        if(req.query.filename!==undefined&&1<=req.query.filename<=16&&fileRegex.test(req.query.filename))
-                            db.uploadFile(decoded.username, decoded.username + "-" + req.query.filename, base64Encode(req.query.content), (error, results) =>
+                        if(req.body.filename!==undefined&&1<=req.body.filename<=16&&fileRegex.test(req.body.filename))
+                            db.uploadFile(decoded.username, decoded.username + "-" + req.body.filename, base64Encode(req.body.content), (error, results) =>
                             {
                                 if (error)
                                 {
@@ -307,7 +307,6 @@ app.get("/getFiles", (req, res)=>
     {
         verifyToken(req.query.token, res, (decoded)=>
         {
-            console.log(decoded.username);
             if(decoded.username===undefined)res.status(400).json({error: "unknown error"});
             else
                 db.findFiles(decoded.username, (error, results)=>
@@ -368,7 +367,6 @@ function verifyToken(token, res, callback)
 {
     jwt.verify(token, publicKey, {algorithms: ['RS256']}, (error, result) =>
     {
-        console.log("token:"+token);
         if(error)res.status(401).json({error:"token malformed!"});
         else
         {
