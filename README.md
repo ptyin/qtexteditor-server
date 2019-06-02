@@ -49,14 +49,14 @@ exports.authorizationCode = "**********";//qq邮箱SMTP授权码
 
 
     # 私钥
-    ssl genrsa -out rsa_private.pem 1024
+    openssl genrsa -out rsa_private.pem 1024
     # 公钥
     openssl rsa -in rsa_private.pem -pubout -out rsa_public_key.pem
                                             
 
 ## Launch
 
-    node app.js
+    node index.js
 
 ## 注意事项
 

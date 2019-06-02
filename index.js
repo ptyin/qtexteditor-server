@@ -7,7 +7,7 @@ const mysql = require('mysql');
 const jwt = require('jsonwebtoken');
 const app = express();
 const db = require('./DBOperations.js');
-const queryParser = require('body-parser');
+const bodyParser = require('body-parser');
 const nodeMailer = require('nodemailer');
 const emailUser = config.email;
 const emailPass = config.authorizationCode;
@@ -68,8 +68,8 @@ console.log(base64Decode(content)+":"+content);
 db.deleteFile("filename-a5-html");
 db.uploadFile("peter", "filename-a5-html", content, (result)=>{});//文件上传别忘编码
 
-app.use(queryParser.json());
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 //传送过来的参数password为md5加密后的password
 /*
 * @paras:username, password
@@ -172,7 +172,7 @@ app.get('/register', (req, res) =>
 });
 
 /*
-* @paras:token, filename
+* @paras:token, filename, content
 * */
 app.post("/uploadFile", (req, res)=>
 {
