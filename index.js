@@ -282,7 +282,7 @@ app.get("/getContent", (req, res)=>
         {
             if(decoded.username===undefined)res.status(400).json({error: "unknown error"});
             else
-                db.returnContent(decoded.username, req.query.filename, (error, results)=>
+                db.returnContent(decoded.username, decoded.username+"-"+req.query.filename, (error, results)=>
                 {
                     if(error)
                     {
@@ -290,7 +290,10 @@ app.get("/getContent", (req, res)=>
                         return;
                     }
                     if (results[0]!==undefined)
+                    {
                         res.status(200).json({message:"get contents successfully", content: base64Decode(results[0].content)});
+                        console.log(base64Decode(results[0].content));
+                    }
                     else
                         res.status(404).json({error: "get contents fails!"});
                 });
@@ -334,7 +337,7 @@ app.get('/deleteFile', (req, res)=>
             if(decoded.username===undefined)res.status(400).json({error: "unknown error"});
             else
             {
-                db.deleteFile(decoded.username, req.query.filename, (error, results) =>
+                db.deleteFile(decoded.username, decoded.username+"-"+req.query.filename, (error, results) =>
                 {
                     if (error)
                     {
