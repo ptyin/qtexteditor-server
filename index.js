@@ -119,7 +119,7 @@ app.get('/validate', (req, res)=>
                     return;
                 }
                 if (results.affectedRows)
-                    res.status(200).json({message: "email sent!"});
+                    res.status(200).json({message: "register success!"});
                 else
                     res.status(404).json({error: "unknown error!"});
             });
@@ -184,21 +184,45 @@ app.post("/uploadFile", (req, res)=>
             if(decoded.username===undefined)res.status(400).json({error: "unknown error"});
             else
             {
-                if(req.query.filename!==undefined&&1<=req.query.filename<=16&&fileRegex.test(req.query.filename))
-                    db.uploadFile(decoded.username, decoded.username + "-" + req.query.filename, base64Encode(req.query.content), (error, results) =>
+                db.findOneFile(decoded.username, (error, result)=>
+                {
+                    if(error)
                     {
-                        if (error)
+                        res.status(400).json({error:"unknown error"});
+                        return;
+                    }
+                    if(result[0])//update
+                    db.updateFile(decoded.username, req.query.filename, base64Encode(req.query.content), (error, results)=>
+                    {
+                        if(error)
                         {
-                            res.status(400).json({error: "unknown error"});
+                            res.status(400).json({error:"unknown error"});
                             return;
                         }
                         if (results.affectedRows)
-                            res.status(200).json({message: "upload successful!"});
+                            res.status(200).json({message: "update successful!"});
                         else
-                            res.status(404).json({error: "upload fails!"});
+                            res.status(404).json({error: "update fails!"});
                     });
-                else
-                    res.status(400).json({error:"invalid filename"})
+                    else//create new file
+                    {
+                        if(req.query.filename!==undefined&&1<=req.query.filename<=16&&fileRegex.test(req.query.filename))
+                            db.uploadFile(decoded.username, decoded.username + "-" + req.query.filename, base64Encode(req.query.content), (error, results) =>
+                            {
+                                if (error)
+                                {
+                                    res.status(400).json({error: "unknown error"});
+                                    return;
+                                }
+                                if (results.affectedRows)
+                                    res.status(200).json({message: "upload successful!"});
+                                else
+                                    res.status(404).json({error: "upload fails!"});
+                            });
+                        else
+                            res.status(400).json({error:"invalid filename"})
+                    }
+                });
             }
         });
     }
@@ -207,29 +231,45 @@ app.post("/uploadFile", (req, res)=>
 /*
 * @paras:token, filename, content
 * */
-app.post("/updateFile", (req, res)=>
-{
-    if(req.query.token !== undefined)
-    {
-        verifyToken(req.query.token, res, (decoded)=>
-        {
-            if(decoded.username===undefined)res.status(400).json({error: "unknown error"});
-            else
-                db.updateFile(decoded.username, req.query.filename, base64Encode(req.query.content), (error, results)=>
-                {
-                    if(error)
-                    {
-                        res.status(400).json({error:"unknown error"});
-                        return;
-                    }
-                    if (results.affectedRows)
-                        res.status(200).json({message: "update successful!"});
-                    else
-                        res.status(404).json({error: "update fails!"});
-                });
-        });
-    }
-});
+// app.post("/updateFile", (req, res)=>
+// {
+//     if(req.query.token !== undefined)
+//     {
+//         verifyToken(req.query.token, res, (decoded)=>
+//         {
+//             if(decoded.username===undefined)res.status(400).json({error: "unknown error"});
+//             else
+//                 db.updateFile(decoded.username, req.query.filename, base64Encode(req.query.content), (error, results)=>
+//                 {
+//                     if(error)
+//                     {
+//                         res.status(400).json({error:"unknown error"});
+//                         return;
+//                     }
+//                     if (results.affectedRows)
+//                         res.status(200).json({message: "update successful!"});
+//                     else
+//                         res.status(404).json({error: "update fails!"});
+//                 });
+//         });
+//     }
+// });
+
+// if(req.query.filename!==undefined&&1<=req.query.filename<=16&&fileRegex.test(req.query.filename))
+//     db.uploadFile(decoded.username, decoded.username + "-" + req.query.filename, base64Encode(req.query.content), (error, results) =>
+//     {
+//         if (error)
+//         {
+//             res.status(400).json({error: "unknown error"});
+//             return;
+//         }
+//         if (results.affectedRows)
+//             res.status(200).json({message: "upload successful!"});
+//         else
+//             res.status(404).json({error: "upload fails!"});
+//     });
+// else
+//     res.status(400).json({error:"invalid filename"})
 
 /*
 * @paras:token, filename
@@ -328,6 +368,7 @@ function verifyToken(token, res, callback)
 {
     jwt.verify(token, publicKey, {algorithms: ['RS256']}, (error, result) =>
     {
+        console.log("token:"+token);
         if(error)res.status(401).json({error:"token malformed!"});
         else
         {

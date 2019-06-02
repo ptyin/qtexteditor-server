@@ -75,6 +75,16 @@ exports.deleteFile = function (username, filename, callback)
     });
 };
 
+exports.findOneFile = function (username, filename, callback)
+{
+    connection.query("select fileName from files where fileName=\""+filename+"\" and owner=\""+username+"\";", function (error, result)
+    {
+        if(error)
+            console.log(error);
+        if(callback)callback(error, result);
+    });
+};
+
 exports.findFiles = function (username, callback)
 {
     connection.query("select fileName from files where owner = \""+username+"\";", function (error, results)

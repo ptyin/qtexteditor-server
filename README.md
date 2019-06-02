@@ -31,7 +31,7 @@ exports.authorizationCode = "**********";//qq邮箱SMTP授权码
     use QtLaTeX;
     create table if not exists userInfo(
         `name` varchar(30),
-        `passwd` varchar(30) NOT NULL ,
+        `passwd` varchar(40) NOT NULL ,
         `email` varchar(30) NOT NULL ,
         primary key (`name`)
     )ENGINE=InnoDB DEFAULT CHARSET=utf8;
