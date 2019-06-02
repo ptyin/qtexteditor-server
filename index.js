@@ -12,7 +12,7 @@ const nodeMailer = require('nodemailer');
 const emailUser = config.email;
 const emailPass = config.authorizationCode;
 const userRegex = /[\w]{5,20}/;
-const passwdRegex = /[\w]/;
+const passwdRegex = /[\w]*/;
 const emailRegex = /^\w+@[a-zA-Z0-9]{2,10}(?:\.[a-z]{2,4}){1,3}$/;
 const fileRegex = /[\w-_]{1,16}/;
 
