@@ -12,6 +12,7 @@ const nodeMailer = require('nodemailer');
 const emailUser = config.email;
 const emailPass = config.authorizationCode;
 const userRegex = /[\w]{5,20}/;
+const passwdRegex = /[\w]/;
 const emailRegex = /^\w+@[a-zA-Z0-9]{2,10}(?:\.[a-z]{2,4}){1,3}$/;
 const fileRegex = /[\w-_]{1,16}/;
 
@@ -76,7 +77,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 * */
 app.get('/login', (req, res) =>
 {
-    if(typeof req.query.username == 'string' &&req.query.username.length<=20&&userRegex.test(req.query.username))
+    if(typeof req.query.username == 'string' &&req.query.username.length<=20&&userRegex.test(req.query.username)&&passwdRegex.test(req.query.password))
         db.findUser(req.query.username, (error, result)=>
         {
             if(error)
@@ -91,7 +92,7 @@ app.get('/login', (req, res) =>
                     res.status(400).json({error:"unknown error"});
                     return;
                 }
-                if(!result[0])res.status(401).json({error:"password not valid"});
+                if(!result[0])res.status(401).json({error:"wrong password"});
                 else
                 {
                     res.status(200).json({message:req.query.username, token:generateCommonToken(req.query.username)});
@@ -118,7 +119,7 @@ app.get('/validate', (req, res)=>
                     return;
                 }
                 if (results.affectedRows)
-                    res.status(200).json({message: "register successful!"});
+                    res.status(200).json({message: "email sent!"});
                 else
                     res.status(404).json({error: "unknown error!"});
             });
@@ -134,7 +135,7 @@ app.get('/validate', (req, res)=>
 * */
 app.get('/register', (req, res) =>
 {
-    if(typeof req.query.username == 'string'&&req.query.username.length<=20&&userRegex.test(req.query.username))
+    if(typeof req.query.username == 'string'&&req.query.username.length<=20&&userRegex.test(req.query.username)&&passwdRegex.test(req.query.password))
     {
         if(typeof req.query.email == 'string'&&req.query.email.length<=30&&emailRegex.test(req.query.email))// email验证
             db.findUser(req.query.username, (error, results)=>
@@ -204,7 +205,7 @@ app.post("/uploadFile", (req, res)=>
 });
 
 /*
-* @paras:token, filename
+* @paras:token, filename, content
 * */
 app.post("/updateFile", (req, res)=>
 {
@@ -249,7 +250,7 @@ app.get("/getContent", (req, res)=>
                         return;
                     }
                     if (results[0]!==undefined)
-                        res.status(200).json({content: base64Decode(results[0].content)});
+                        res.status(200).json({message:"get contents successfully", content: base64Decode(results[0].content)});
                     else
                         res.status(404).json({error: "get contents fails!"});
                 });
@@ -276,7 +277,7 @@ app.get("/getFiles", (req, res)=>
                         res.status(400).json({error:"unknown error"});
                         return;
                     }
-                    res.status(200).json({files: results});
+                    res.status(200).json({message:"get files successfully", files: results});
                 });
         });
     }
