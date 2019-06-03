@@ -48,7 +48,7 @@ let transporter = nodeMailer.createTransport(
         }
     });
 
-const sendEmail = '<h1 align="center">Thanks for registering...</h1> Please Confirm your Email <a href="'+SRV_HOST+':'+SRV_PORT+'/validate?registerToken=(:placeholder)">'
+let sendEmail = '<h1 align="center">Thanks for registering...</h1> Please Confirm your Email <a href="'+SRV_HOST+':'+SRV_PORT+'/validate?registerToken=(:placeholder)">'
     +SRV_HOST+':'+SRV_PORT+'/validate?registerToken=(:placeholder)</a>';
 
 let data = {
