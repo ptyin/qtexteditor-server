@@ -48,13 +48,15 @@ let transporter = nodeMailer.createTransport(
         }
     });
 
+const sendEmail = '<h1 align="center">Thanks for registering...</h1> Please Confirm your Email <a href="'+SRV_HOST+':'+SRV_PORT+'/validate?registerToken=(:placeholder)">'
+    +SRV_HOST+':'+SRV_PORT+'/validate?registerToken=(:placeholder)</a>';
+
 let data = {
     from: emailUser, // 发件地址
     to: 'test@test.com', // 收件列表
     subject: 'Welcome to QtLaTeX', // 标题
     text: 'Thanks for registering..., Please Confirm your Email.', // 标题
-    html: '<h1 align="center">Thanks for registering..., Please Confirm your Email <a href="'+SRV_HOST+':'+SRV_PORT+'/validate?registerToken=(:placeholder)">'
-        +SRV_HOST+':'+SRV_PORT+'/validate?registerToken=(:placeholder)</a></h1>' // html 内容
+    html: ''
 };
 
 connection.connect();
@@ -148,7 +150,7 @@ app.get('/register', (req, res) =>
                 if(!results[0])//用户名可用
                 {
                     data.to = req.query.email;
-                    data.html = data.html.replace(/\(:placeholder\)/g, generateRegisterToken(req.query.username, req.query.password, req.query.email));
+                    data.html = sendEmail.replace(/\(:placeholder\)/g, generateRegisterToken(req.query.username, req.query.password, req.query.email));
                     console.log(data);
                     transporter.sendMail(data, (err, info)=>
                     {
