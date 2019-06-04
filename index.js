@@ -160,7 +160,7 @@ app.get('/register', (req, res) =>
                             return;
                         }
                         if(info.accepted!==undefined&&info.accepted.length>0)
-                            res.status(200).json({message:"success"});
+                            res.status(200).json({message:"email sent! please check your email"});
                         else
                             res.stat(406).status({error:"fail"});
                     });
