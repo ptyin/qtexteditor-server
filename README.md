@@ -1,5 +1,7 @@
 # QtLaTeX Server
 
+![](demo/Qt-TextEditor-Server.png)
+
 QtLaTeX项目的服务器端
 - 在config.js配置相关参数
 - e.g.
