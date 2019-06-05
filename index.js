@@ -71,7 +71,7 @@ db.setConnection(connection);
 // db.deleteFile("filename-a5-html");
 // db.uploadFile("peter", "filename-a5-html", content, (result)=>{});//文件上传别忘编码
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit:'100mb'}));
 app.use(bodyParser.urlencoded({ extended: true }));
 //传送过来的参数password为md5加密后的password
 /*
