@@ -396,6 +396,6 @@ function base64Decode(encoded)
 
 
 http.createServer(app).listen(app.get('port'), function(){
-    console.log("\n*********************"+Date().now()+"*********************\n");
+    console.log("\n*********************"+Date.now()+"*********************\n");
     console.log('Express server listening on port ' + SRV_PORT);
 });
