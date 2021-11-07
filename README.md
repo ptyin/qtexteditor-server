@@ -1,4 +1,4 @@
-# QtLaTeX Server
+# Qtexteditor Server
 
 ![](demo/Qt-TextEditor-Server.png)
 
